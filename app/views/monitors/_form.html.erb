@@ -1,4 +1,4 @@
-<%= form_with(model: monitor, class: "space-y-8") do |form| %>
+<%= form_with(model: monitor, url: monitor.new_record? ? monitors_path : monitor_path(monitor), class: "space-y-8") do |form| %>
   <% if monitor.errors.any? %>
     <div class="rounded-lg border border-red-200 bg-red-50 p-4">
       <div class="flex">
