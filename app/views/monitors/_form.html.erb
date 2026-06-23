@@ -28,7 +28,7 @@
 
       <div>
         <%= form.label :monitor_type, "Monitor Type", class: "block text-sm font-medium text-slate-700" %>
-        <%= form.select :monitor_type, Monitor.monitor_types.keys.map { |t| [t.capitalize, t] }, {}, class: "mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500" %>
+        <%= form.select :monitor_type, SiteMonitor.monitor_types.keys.map { |t| [t.capitalize, t] }, {}, class: "mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500" %>
       </div>
 
       <div>
