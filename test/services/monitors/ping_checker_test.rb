@@ -1,5 +1,16 @@
 require "test_helper"
 
+module Net
+  module Ping
+    class ICMP
+      def initialize(host, port = nil, timeout = nil); end
+      def ping; end
+      def status; end
+      def duration; end
+    end
+  end
+end
+
 class Monitors::PingCheckerTest < ActiveSupport::TestCase
   setup do
     @monitor = site_monitors(:ping_monitor)
@@ -11,7 +22,10 @@ class Monitors::PingCheckerTest < ActiveSupport::TestCase
     ping_obj.define_singleton_method(:status) { "alive" }
     ping_obj.define_singleton_method(:duration) { 0.005 }
 
-    Net::Ping::ICMP.stub(:new, ping_obj) do
+    original_new = Net::Ping::ICMP.method(:new)
+    Net::Ping::ICMP.define_singleton_method(:new) { |*args| ping_obj }
+
+    begin
       checker = Monitors::PingChecker.new(@monitor)
       result = checker.check
 
@@ -20,6 +34,8 @@ class Monitors::PingCheckerTest < ActiveSupport::TestCase
       assert_equal 5, result.response_time
       assert_equal 0.005, result.metadata["ping_duration"]
       assert_equal "8.8.8.8", result.metadata["host"]
+    ensure
+      Net::Ping::ICMP.define_singleton_method(:new, original_new)
     end
   end
 
@@ -28,12 +44,17 @@ class Monitors::PingCheckerTest < ActiveSupport::TestCase
     ping_obj.define_singleton_method(:ping) { false }
     ping_obj.define_singleton_method(:status) { "timeout" }
 
-    Net::Ping::ICMP.stub(:new, ping_obj) do
+    original_new = Net::Ping::ICMP.method(:new)
+    Net::Ping::ICMP.define_singleton_method(:new) { |*args| ping_obj }
+
+    begin
       checker = Monitors::PingChecker.new(@monitor)
       result = checker.check
 
       assert_equal "down", result.status
       assert_equal @monitor, result.monitor
+    ensure
+      Net::Ping::ICMP.define_singleton_method(:new, original_new)
     end
   end
 end

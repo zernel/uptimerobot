@@ -22,26 +22,37 @@ class Monitors::SslCheckerTest < ActiveSupport::TestCase
     tcp_socket = Object.new
     tcp_socket.define_singleton_method(:close) { nil }
 
-    TCPSocket.stub(:new, tcp_socket) do
-      OpenSSL::SSL::SSLSocket.stub(:new, ssl_socket) do
-        checker = Monitors::SslChecker.new(@monitor)
-        result = checker.check
+    original_tcp_new = TCPSocket.method(:new)
+    original_ssl_new = OpenSSL::SSL::SSLSocket.method(:new)
+    TCPSocket.define_singleton_method(:new) { |*args| tcp_socket }
+    OpenSSL::SSL::SSLSocket.define_singleton_method(:new) { |*args| ssl_socket }
 
-        assert_equal "up", result.status
-        assert_equal @monitor, result.monitor
-        assert result.metadata["days_until_expiry"] > 0
-        assert_equal "example.com", result.metadata["subject"].split("=").last
-      end
+    begin
+      checker = Monitors::SslChecker.new(@monitor)
+      result = checker.check
+
+      assert_equal "up", result.status
+      assert_equal @monitor, result.monitor
+      assert result.metadata["days_until_expiry"] > 0
+      assert_equal "example.com", result.metadata["subject"].split("=").last
+    ensure
+      TCPSocket.define_singleton_method(:new, original_tcp_new)
+      OpenSSL::SSL::SSLSocket.define_singleton_method(:new, original_ssl_new)
     end
   end
 
   test "returns down status when certificate cannot be fetched" do
-    TCPSocket.stub(:new, ->(*_args) { raise Errno::ECONNREFUSED, "Connection refused" }) do
+    original_tcp_new = TCPSocket.method(:new)
+    TCPSocket.define_singleton_method(:new) { |*args| raise Errno::ECONNREFUSED, "Connection refused" }
+
+    begin
       checker = Monitors::SslChecker.new(@monitor)
       result = checker.check
 
       assert_equal "down", result.status
       assert_equal "Unable to fetch SSL certificate", result.error_message
+    ensure
+      TCPSocket.define_singleton_method(:new, original_tcp_new)
     end
   end
 end

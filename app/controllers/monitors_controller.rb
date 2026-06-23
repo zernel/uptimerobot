@@ -38,7 +38,7 @@ class MonitorsController < ApplicationController
     @monitor = SiteMonitor.new(monitor_params)
 
     if @monitor.save
-      redirect_to @monitor, notice: 'Monitor was successfully created.'
+      redirect_to monitor_url(@monitor), notice: 'Monitor was successfully created.'
     else
       @monitor_groups = MonitorGroup.all
       @tags = Tag.all
@@ -53,7 +53,7 @@ class MonitorsController < ApplicationController
 
   def update
     if @monitor.update(monitor_params)
-      redirect_to @monitor, notice: 'Monitor was successfully updated.'
+      redirect_to monitor_url(@monitor), notice: 'Monitor was successfully updated.'
     else
       @monitor_groups = MonitorGroup.all
       @tags = Tag.all
@@ -68,17 +68,17 @@ class MonitorsController < ApplicationController
 
   def pause
     @monitor.update!(paused: true, status: 'paused')
-    redirect_to @monitor, notice: 'Monitor paused.'
+    redirect_to monitor_url(@monitor), notice: 'Monitor paused.'
   end
 
   def resume
     @monitor.update!(paused: false, status: 'pending')
-    redirect_to @monitor, notice: 'Monitor resumed.'
+    redirect_to monitor_url(@monitor), notice: 'Monitor resumed.'
   end
 
   def reset
     @monitor.update!(consecutive_failures: 0, status: 'pending')
-    redirect_to @monitor, notice: 'Monitor reset.'
+    redirect_to monitor_url(@monitor), notice: 'Monitor reset.'
   end
 
   private
