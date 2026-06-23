@@ -2,7 +2,7 @@ class HeartbeatController < ApplicationController
   skip_before_action :authenticate_user!
 
   def ping
-    monitor = Monitor.find_by(heartbeat_token: params[:token])
+    monitor = SiteMonitor.find_by(heartbeat_token: params[:token])
 
     if monitor
       monitor.update!(last_heartbeat_at: Time.current)

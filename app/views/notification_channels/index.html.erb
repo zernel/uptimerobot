@@ -1,0 +1,79 @@
+<% content_for(:page_title) { "Notification Channels" } %>
+
+<% content_for(:page_actions) do %>
+  <%= link_to new_notification_channel_path, class: "inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800 transition-colors" do %>
+    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+    Add Channel
+  <% end %>
+<% end %>
+
+<div class="space-y-6">
+  <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <% if @notification_channels.any? %>
+      <div class="divide-y divide-slate-100">
+        <% @notification_channels.each do |channel| %>
+          <%= link_to notification_channel_path(channel), class: "flex items-center gap-4 px-6 py-5 hover:bg-slate-50 transition-colors" do %>
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg
+              <%= case channel.channel_type
+                  when 'email' then 'bg-blue-100'
+                  when 'slack' then 'bg-purple-100'
+                  when 'mattermost' then 'bg-indigo-100'
+                  when 'feishu' then 'bg-sky-100'
+                  else 'bg-slate-100'
+                  end %>">
+              <% case channel.channel_type %>
+              <% when 'email' %>
+                <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+              <% when 'slack' %>
+                <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.977 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+                </svg>
+              <% else %>
+                <svg class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                </svg>
+              <% end %>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <p class="text-sm font-semibold text-slate-900"><%= channel.name %></p>
+                <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                  <%= channel.channel_type.capitalize %>
+                </span>
+              </div>
+              <p class="mt-0.5 text-xs text-slate-500">
+                <% if channel.channel_type == 'email' %>
+                  <%= channel.config['address'] %>
+                <% elsif channel.config['webhook_url'].present? %>
+                  <%= truncate(channel.config['webhook_url'], length: 50) %>
+                <% end %>
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium <%= channel.enabled? ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' %>">
+                <span class="h-1.5 w-1.5 rounded-full <%= channel.enabled? ? 'bg-emerald-500' : 'bg-slate-400' %>"></span>
+                <%= channel.enabled? ? 'Enabled' : 'Disabled' %>
+              </span>
+              <span class="text-sm text-slate-500"><%= channel.monitors.size %> monitors</span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="px-6 py-16 text-center">
+        <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+        </svg>
+        <p class="mt-3 text-sm font-medium text-slate-500">No notification channels</p>
+        <p class="mt-1 text-xs text-slate-400">Set up alerts to get notified when monitors go down</p>
+        <%= link_to "Add Channel", new_notification_channel_path, class: "mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800" %>
+      </div>
+    <% end %>
+  </div>
+</div>

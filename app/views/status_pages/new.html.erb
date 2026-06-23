@@ -1,0 +1,12 @@
+<% content_for(:page_title) { "New Status Page" } %>
+
+<div class="mx-auto max-w-3xl">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Create Status Page</h2>
+    <p class="mt-1 text-sm text-slate-500">Create a public status page to communicate your service health.</p>
+
+    <div class="mt-6">
+      <%= render "form", status_page: @status_page, monitors: @monitors %>
+    </div>
+  </div>
+</div>

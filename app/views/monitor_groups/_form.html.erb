@@ -1,0 +1,39 @@
+<%= form_with(model: monitor_group, class: "space-y-6") do |form| %>
+  <% if monitor_group.errors.any? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 p-4">
+      <div class="flex">
+        <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800"><%= pluralize(monitor_group.errors.count, "error") %> prohibited this group from being saved:</h3>
+          <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-red-700">
+            <% monitor_group.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, class: "block text-sm font-medium text-slate-700" %>
+    <%= form.text_field :name, class: "mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500", placeholder: "Production Servers" %>
+  </div>
+
+  <div>
+    <%= form.label :description, class: "block text-sm font-medium text-slate-700" %>
+    <%= form.text_area :description, rows: 3, class: "mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500", placeholder: "Optional description..." %>
+  </div>
+
+  <div>
+    <%= form.label :sort_order, "Sort Order", class: "block text-sm font-medium text-slate-700" %>
+    <%= form.number_field :sort_order, class: "mt-1 block w-full max-w-xs rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500" %>
+  </div>
+
+  <div class="flex items-center justify-end gap-3 border-t border-slate-200 pt-6">
+    <%= link_to "Cancel", monitor_group.persisted? ? monitor_group_path(monitor_group) : monitor_groups_path, class: "rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors" %>
+    <%= form.submit class: "rounded-lg bg-slate-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800 transition-colors cursor-pointer" %>
+  </div>
+<% end %>

@@ -1,0 +1,71 @@
+<% content_for(:page_title) { @monitor_group.name } %>
+
+<% content_for(:page_actions) do %>
+  <div class="flex items-center gap-2">
+    <%= link_to "Edit", edit_monitor_group_path(@monitor_group), class: "inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors" %>
+    <%= button_to "Delete", monitor_group_path(@monitor_group), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "inline-flex items-center gap-2 rounded-lg border border-red-300 bg-white px-4 py-2.5 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors" %>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-xl font-bold text-slate-900"><%= @monitor_group.name %></h2>
+    <% if @monitor_group.description.present? %>
+      <p class="mt-2 text-sm text-slate-600"><%= @monitor_group.description %></p>
+    <% end %>
+    <div class="mt-4 flex items-center gap-4">
+      <span class="text-sm text-slate-500"><%= @monitors.size %> monitors</span>
+      <div class="flex gap-2">
+        <% up_count = @monitors.select { |m| m.status == 'up' }.size %>
+        <% down_count = @monitors.select { |m| m.status == 'down' }.size %>
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+          <%= up_count %> Up
+        </span>
+        <% if down_count > 0 %>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+            <span class="h-2 w-2 rounded-full bg-red-500"></span>
+            <%= down_count %> Down
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div class="border-b border-slate-200 px-6 py-4">
+      <h3 class="text-base font-semibold text-slate-900">Monitors</h3>
+    </div>
+    <% if @monitors.any? %>
+      <div class="divide-y divide-slate-100">
+        <% @monitors.each do |monitor| %>
+          <%= link_to monitor_path(monitor), class: "flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition-colors" do %>
+            <div class="h-3 w-3 rounded-full
+              <%= case monitor.status
+                  when 'up' then 'bg-emerald-500'
+                  when 'down' then 'bg-red-500'
+                  when 'paused' then 'bg-amber-500'
+                  else 'bg-slate-400'
+                  end %>"></div>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-medium text-slate-900"><%= monitor.name %></p>
+              <p class="text-xs text-slate-500"><%= monitor.url.presence || monitor.hostname.presence || "—" %></p>
+            </div>
+            <span class="text-sm font-medium
+              <%= case monitor.status
+                  when 'up' then 'text-emerald-600'
+                  when 'down' then 'text-red-600'
+                  else 'text-slate-500'
+                  end %>">
+              <%= monitor.status.capitalize %>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="px-6 py-8 text-center">
+        <p class="text-sm text-slate-500">No monitors in this group</p>
+      </div>
+    <% end %>
+  </div>
+</div>

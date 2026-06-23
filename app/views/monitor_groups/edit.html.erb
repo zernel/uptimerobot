@@ -1,0 +1,11 @@
+<% content_for(:page_title) { "Edit #{@monitor_group.name}" } %>
+
+<div class="mx-auto max-w-3xl">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Edit Monitor Group</h2>
+
+    <div class="mt-6">
+      <%= render "form", monitor_group: @monitor_group %>
+    </div>
+  </div>
+</div>

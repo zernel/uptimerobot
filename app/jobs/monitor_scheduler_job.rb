@@ -4,7 +4,7 @@ class MonitorSchedulerJob < ApplicationJob
   def perform
     now = Time.current
 
-    Monitor.active.find_each do |monitor|
+    SiteMonitor.active.find_each do |monitor|
       next if monitor.last_check_at.present? &&
               (now - monitor.last_check_at) < monitor.interval.seconds
 

@@ -1,0 +1,12 @@
+<% content_for(:page_title) { "Schedule Maintenance" } %>
+
+<div class="mx-auto max-w-3xl">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Schedule Maintenance Window</h2>
+    <p class="mt-1 text-sm text-slate-500">Suppress alerts during planned maintenance.</p>
+
+    <div class="mt-6">
+      <%= render "form", maintenance_window: @maintenance_window, monitors: @monitors %>
+    </div>
+  </div>
+</div>

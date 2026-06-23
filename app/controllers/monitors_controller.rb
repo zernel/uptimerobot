@@ -2,7 +2,7 @@ class MonitorsController < ApplicationController
   before_action :set_monitor, only: [:show, :edit, :update, :destroy, :pause, :resume, :reset]
 
   def index
-    @monitors = Monitor.includes(:monitor_group, :tags)
+    @monitors = SiteMonitor.includes(:monitor_group, :tags)
                        .order(:name)
                        .page(params[:page])
 
@@ -29,13 +29,13 @@ class MonitorsController < ApplicationController
   end
 
   def new
-    @monitor = Monitor.new
+    @monitor = SiteMonitor.new
     @monitor_groups = MonitorGroup.all
     @tags = Tag.all
   end
 
   def create
-    @monitor = Monitor.new(monitor_params)
+    @monitor = SiteMonitor.new(monitor_params)
 
     if @monitor.save
       redirect_to @monitor, notice: 'Monitor was successfully created.'
@@ -84,7 +84,7 @@ class MonitorsController < ApplicationController
   private
 
   def set_monitor
-    @monitor = Monitor.find(params[:id])
+    @monitor = SiteMonitor.find(params[:id])
   end
 
   def monitor_params

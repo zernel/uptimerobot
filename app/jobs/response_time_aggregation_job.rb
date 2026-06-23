@@ -10,7 +10,7 @@ class ResponseTimeAggregationJob < ApplicationJob
   def aggregate_hourly_stats
     one_hour_ago = 1.hour.ago.beginning_of_hour
 
-    Monitor.active.find_each do |monitor|
+    SiteMonitor.active.find_each do |monitor|
       results = monitor.check_results
                       .where('checked_at >= ? AND checked_at < ?', one_hour_ago, one_hour_ago + 1.hour)
                       .where.not(response_time: nil)

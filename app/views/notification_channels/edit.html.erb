@@ -1,0 +1,11 @@
+<% content_for(:page_title) { "Edit #{@notification_channel.name}" } %>
+
+<div class="mx-auto max-w-3xl">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">Edit Notification Channel</h2>
+
+    <div class="mt-6">
+      <%= render "form", notification_channel: @notification_channel %>
+    </div>
+  </div>
+</div>

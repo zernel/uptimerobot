@@ -1,0 +1,57 @@
+<div class="sm:mx-auto sm:w-full sm:max-w-md">
+  <div class="flex justify-center">
+    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900">
+      <svg class="h-8 w-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+      </svg>
+    </div>
+  </div>
+  <h2 class="mt-6 text-center text-2xl font-bold text-slate-900">Sign in to UptimeRobot</h2>
+  <p class="mt-2 text-center text-sm text-slate-500">Monitor your services and stay informed</p>
+</div>
+
+<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+  <div class="rounded-xl border border-slate-200 bg-white px-6 py-8 shadow-sm">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-slate-700" %>
+        <div class="mt-1">
+          <%= f.email_field :email, autofocus: true, autocomplete: "email",
+            class: "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500",
+            placeholder: "you@example.com" %>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          <%= f.label :password, class: "block text-sm font-medium text-slate-700" %>
+          <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+            <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-sm font-medium text-slate-500 hover:text-slate-700" %>
+          <% end %>
+        </div>
+        <div class="mt-1">
+          <%= f.password_field :password, autocomplete: "current-password",
+            class: "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500",
+            placeholder: "Enter your password" %>
+        </div>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="flex items-center">
+          <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-500" %>
+          <%= f.label :remember_me, "Remember me", class: "ml-2 block text-sm text-slate-700" %>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.submit "Sign in",
+          class: "flex w-full justify-center rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800 transition-colors cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+
+  <p class="mt-6 text-center text-sm text-slate-500">
+    Don't have an account?
+    <%= link_to "Sign up", new_registration_path(resource_name), class: "font-medium text-slate-900 hover:text-slate-700" %>
+  </p>
+</div>

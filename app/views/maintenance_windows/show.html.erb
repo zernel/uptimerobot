@@ -1,0 +1,86 @@
+<% content_for(:page_title) { @maintenance_window.name } %>
+
+<% content_for(:page_actions) do %>
+  <div class="flex items-center gap-2">
+    <%= link_to "Edit", edit_maintenance_window_path(@maintenance_window), class: "inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors" %>
+    <%= button_to "Delete", maintenance_window_path(@maintenance_window), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "inline-flex items-center gap-2 rounded-lg border border-red-300 bg-white px-4 py-2.5 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors" %>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-start gap-4">
+      <div class="flex h-14 w-14 items-center justify-center rounded-full
+        <%= if @maintenance_window.active?
+            'bg-amber-100'
+          elsif @maintenance_window.upcoming?
+            'bg-blue-100'
+          else
+            'bg-slate-100'
+          end %>">
+        <svg class="h-7 w-7
+          <%= if @maintenance_window.active?
+              'text-amber-600'
+            elsif @maintenance_window.upcoming?
+              'text-blue-600'
+            else
+              'text-slate-500'
+            end %>" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-slate-900"><%= @maintenance_window.name %></h2>
+        <% if @maintenance_window.description.present? %>
+          <p class="mt-2 text-sm text-slate-600"><%= @maintenance_window.description %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-4">
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Status</p>
+        <span class="mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+          <%= if @maintenance_window.active?
+              'bg-amber-100 text-amber-800'
+            elsif @maintenance_window.upcoming?
+              'bg-blue-100 text-blue-800'
+            else
+              'bg-slate-100 text-slate-600'
+            end %>">
+          <%= if @maintenance_window.active?
+              'Active'
+            elsif @maintenance_window.upcoming?
+              'Upcoming'
+            else
+              'Past'
+            end %>
+        </span>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Starts</p>
+        <p class="mt-1 text-sm font-medium text-slate-900"><%= @maintenance_window.starts_at.strftime('%b %d, %Y %H:%M') %></p>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Ends</p>
+        <p class="mt-1 text-sm font-medium text-slate-900"><%= @maintenance_window.ends_at.strftime('%b %d, %Y %H:%M') %></p>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Duration</p>
+        <p class="mt-1 text-sm font-medium text-slate-900"><%= distance_of_time_in_words(@maintenance_window.starts_at, @maintenance_window.ends_at) %></p>
+      </div>
+    </div>
+
+    <% if @maintenance_window.recurrence.present? %>
+      <div class="mt-4 rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Recurrence</p>
+        <p class="mt-1 text-sm font-medium text-slate-900">
+          <%= @maintenance_window.recurrence.capitalize %>
+          <% if @maintenance_window.recurrence_end_at %>
+            &middot; Ends <%= @maintenance_window.recurrence_end_at.strftime('%b %d, %Y') %>
+          <% end %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>

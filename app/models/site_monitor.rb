@@ -1,4 +1,5 @@
-class Monitor < ApplicationRecord
+class SiteMonitor < ApplicationRecord
+  self.table_name = "monitors"
   belongs_to :monitor_group, optional: true
 
   has_many :check_results, dependent: :destroy

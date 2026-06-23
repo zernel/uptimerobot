@@ -16,7 +16,7 @@ class StatusPagesController < ApplicationController
 
   def new
     @status_page = StatusPage.new
-    @monitors = Monitor.order(:name)
+    @monitors = SiteMonitor.order(:name)
   end
 
   def create
@@ -25,20 +25,20 @@ class StatusPagesController < ApplicationController
     if @status_page.save
       redirect_to @status_page, notice: 'Status page was successfully created.'
     else
-      @monitors = Monitor.order(:name)
+      @monitors = SiteMonitor.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @monitors = Monitor.order(:name)
+    @monitors = SiteMonitor.order(:name)
   end
 
   def update
     if @status_page.update(status_page_params)
       redirect_to @status_page, notice: 'Status page was successfully updated.'
     else
-      @monitors = Monitor.order(:name)
+      @monitors = SiteMonitor.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end

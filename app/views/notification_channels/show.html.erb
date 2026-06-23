@@ -1,0 +1,84 @@
+<% content_for(:page_title) { @notification_channel.name } %>
+
+<% content_for(:page_actions) do %>
+  <div class="flex items-center gap-2">
+    <%= link_to "Edit", edit_notification_channel_path(@notification_channel), class: "inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors" %>
+    <%= button_to "Delete", notification_channel_path(@notification_channel), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "inline-flex items-center gap-2 rounded-lg border border-red-300 bg-white px-4 py-2.5 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors" %>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-start gap-4">
+      <div class="flex h-14 w-14 items-center justify-center rounded-lg
+        <%= case @notification_channel.channel_type
+            when 'email' then 'bg-blue-100'
+            when 'slack' then 'bg-purple-100'
+            else 'bg-slate-100'
+            end %>">
+        <svg class="h-7 w-7
+          <%= case @notification_channel.channel_type
+              when 'email' then 'text-blue-600'
+              when 'slack' then 'text-purple-600'
+              else 'text-slate-600'
+              end %>" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+        </svg>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-slate-900"><%= @notification_channel.name %></h2>
+        <p class="mt-1 text-sm text-slate-500"><%= @notification_channel.channel_type.capitalize %> channel</p>
+      </div>
+    </div>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-3">
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Status</p>
+        <span class="mt-1 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium <%= @notification_channel.enabled? ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' %>">
+          <span class="h-1.5 w-1.5 rounded-full <%= @notification_channel.enabled? ? 'bg-emerald-500' : 'bg-slate-400' %>"></span>
+          <%= @notification_channel.enabled? ? 'Enabled' : 'Disabled' %>
+        </span>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Connected Monitors</p>
+        <p class="mt-1 text-2xl font-bold text-slate-900"><%= @notification_channel.monitors.size %></p>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Last Used</p>
+        <p class="mt-1 text-sm font-medium text-slate-900">
+          <%= @notification_channel.last_used_at ? time_ago_in_words(@notification_channel.last_used_at) + ' ago' : 'Never' %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <%# Notification Logs %>
+  <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div class="border-b border-slate-200 px-6 py-4">
+      <h3 class="text-base font-semibold text-slate-900">Recent Notifications</h3>
+    </div>
+    <% if @notification_logs.any? %>
+      <div class="divide-y divide-slate-100">
+        <% @notification_logs.each do |log| %>
+          <div class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <span class="h-2.5 w-2.5 rounded-full <%= log.status == 'sent' ? 'bg-emerald-500' : 'bg-red-500' %>"></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-medium text-slate-900"><%= log.monitor.name %></p>
+                <p class="text-xs text-slate-500"><%= truncate(log.message, length: 100) if log.message %></p>
+              </div>
+              <span class="text-xs text-slate-400"><%= time_ago_in_words(log.sent_at) %> ago</span>
+            </div>
+            <% if log.error_message.present? %>
+              <p class="mt-2 ml-6 text-xs text-red-600"><%= log.error_message %></p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="px-6 py-8 text-center">
+        <p class="text-sm text-slate-500">No notifications sent yet</p>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+<% content_for(:page_title) { "Incident: #{@incident.monitor.name}" } %>
+
+<div class="space-y-8">
+  <%# Incident Header %>
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-start gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full <%= @incident.ongoing? ? 'bg-red-100' : 'bg-emerald-100' %>">
+        <% if @incident.ongoing? %>
+          <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        <% else %>
+          <svg class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        <% end %>
+      </div>
+      <div class="flex-1">
+        <div class="flex items-center gap-3">
+          <h2 class="text-xl font-bold text-slate-900"><%= @incident.monitor.name %></h2>
+          <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium <%= @incident.ongoing? ? 'bg-red-100 text-red-800' : 'bg-emerald-100 text-emerald-800' %>">
+            <%= @incident.status.capitalize %>
+          </span>
+        </div>
+        <% if @incident.cause.present? %>
+          <p class="mt-1 text-sm text-slate-600"><%= @incident.cause %></p>
+        <% end %>
+        <% if @incident.cause_detail.present? %>
+          <p class="mt-2 text-sm text-slate-500"><%= @incident.cause_detail %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-4">
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Started</p>
+        <p class="mt-1 text-sm font-medium text-slate-900"><%= @incident.started_at.strftime('%b %d, %Y %H:%M') %></p>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Duration</p>
+        <p class="mt-1 text-sm font-medium text-slate-900">
+          <%= @incident.resolved_at ? distance_of_time_in_words(@incident.started_at, @incident.resolved_at) : time_ago_in_words(@incident.started_at) %>
+        </p>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Resolved</p>
+        <p class="mt-1 text-sm font-medium text-slate-900">
+          <%= @incident.resolved_at ? @incident.resolved_at.strftime('%b %d, %Y %H:%M') : '—' %>
+        </p>
+      </div>
+      <div class="rounded-lg bg-slate-50 p-4">
+        <p class="text-sm text-slate-500">Monitor</p>
+        <p class="mt-1 text-sm font-medium text-slate-900">
+          <%= link_to @incident.monitor.name, monitor_path(@incident.monitor), class: "text-slate-900 hover:text-slate-700 underline" %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-8 lg:grid-cols-3">
+    <div class="lg:col-span-2 space-y-8">
+      <%# Timeline / Comments %>
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-6 py-4">
+          <h3 class="text-base font-semibold text-slate-900">Timeline</h3>
+        </div>
+
+        <div class="divide-y divide-slate-100">
+          <div class="flex gap-4 px-6 py-4">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
+              <svg class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-slate-900">Incident started</p>
+              <p class="text-xs text-slate-500"><%= @incident.started_at.strftime('%b %d, %Y %H:%M') %></p>
+            </div>
+          </div>
+
+          <% @comments.each do |comment| %>
+            <div class="flex gap-4 px-6 py-4">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
+                <svg class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm text-slate-700"><%= comment.content %></p>
+                <p class="text-xs text-slate-500"><%= time_ago_in_words(comment.created_at) %> ago</p>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @incident.resolved_at %>
+            <div class="flex gap-4 px-6 py-4">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100">
+                <svg class="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-emerald-700">Incident resolved</p>
+                <p class="text-xs text-slate-500"><%= @incident.resolved_at.strftime('%b %d, %Y %H:%M') %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Add Comment %>
+        <div class="border-t border-slate-200 px-6 py-4">
+          <%= form_with(url: incident_incident_comments_path(@incident), class: "flex gap-3") do |form| %>
+            <%= form.text_area :content, rows: 2, placeholder: "Add a comment...", class: "flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500" %>
+            <%= form.submit "Post", class: "rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors cursor-pointer self-end" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <%# Notification Logs %>
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-6 py-4">
+          <h3 class="text-base font-semibold text-slate-900">Notifications Sent</h3>
+        </div>
+        <% if @notification_logs.any? %>
+          <div class="divide-y divide-slate-100">
+            <% @notification_logs.each do |log| %>
+              <div class="px-6 py-3">
+                <div class="flex items-center gap-2">
+                  <span class="h-2 w-2 rounded-full <%= log.status == 'sent' ? 'bg-emerald-500' : 'bg-red-500' %>"></span>
+                  <span class="text-sm font-medium text-slate-900"><%= log.notification_channel.name %></span>
+                </div>
+                <p class="mt-0.5 text-xs text-slate-500"><%= time_ago_in_words(log.sent_at) %> ago</p>
+                <% if log.error_message.present? %>
+                  <p class="mt-1 text-xs text-red-600"><%= log.error_message %></p>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="px-6 py-8 text-center">
+            <p class="text-sm text-slate-500">No notifications sent</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

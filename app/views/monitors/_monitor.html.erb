@@ -1,0 +1,52 @@
+<div data-search-target="result" data-status="<%= monitor.status %>" class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition-colors">
+  <div class="flex h-10 w-10 items-center justify-center rounded-full
+    <%= case monitor.status
+        when 'up' then 'bg-emerald-100'
+        when 'down' then 'bg-red-100'
+        when 'paused' then 'bg-amber-100'
+        else 'bg-slate-100'
+        end %>">
+    <div class="h-3 w-3 rounded-full
+      <%= case monitor.status
+          when 'up' then 'bg-emerald-500'
+          when 'down' then 'bg-red-500'
+          when 'paused' then 'bg-amber-500'
+          else 'bg-slate-400'
+          end %>"></div>
+  </div>
+
+  <div class="min-w-0 flex-1">
+    <div class="flex items-center gap-2">
+      <%= link_to monitor.name, monitor_path(monitor), class: "text-sm font-medium text-slate-900 hover:text-slate-700" %>
+      <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+        <%= monitor.monitor_type.upcase %>
+      </span>
+    </div>
+    <p class="mt-0.5 truncate text-xs text-slate-500">
+      <%= monitor.url.presence || monitor.hostname.presence || "—" %>
+    </p>
+  </div>
+
+  <div class="hidden items-center gap-1 sm:flex">
+    <% monitor.tags.each do |tag| %>
+      <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium" style="background-color: <%= tag.color %>20; color: <%= tag.color %>">
+        <%= tag.name %>
+      </span>
+    <% end %>
+  </div>
+
+  <div class="hidden text-right sm:block">
+    <% if monitor.uptime_24h %>
+      <p class="text-sm font-medium <%= monitor.uptime_24h >= 99 ? 'text-emerald-600' : monitor.uptime_24h >= 95 ? 'text-amber-600' : 'text-red-600' %>">
+        <%= monitor.uptime_24h %>%
+      </p>
+      <p class="text-xs text-slate-400">24h</p>
+    <% end %>
+  </div>
+
+  <div class="hidden text-right md:block">
+    <% if monitor.response_time %>
+      <p class="text-sm font-medium text-slate-700"><%= monitor.response_time %> ms</p>
+    <% end %>
+  </div>
+</div>

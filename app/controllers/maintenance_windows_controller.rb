@@ -12,7 +12,7 @@ class MaintenanceWindowsController < ApplicationController
 
   def new
     @maintenance_window = MaintenanceWindow.new
-    @monitors = Monitor.order(:name)
+    @monitors = SiteMonitor.order(:name)
   end
 
   def create
@@ -21,20 +21,20 @@ class MaintenanceWindowsController < ApplicationController
     if @maintenance_window.save
       redirect_to @maintenance_window, notice: 'Maintenance window was successfully created.'
     else
-      @monitors = Monitor.order(:name)
+      @monitors = SiteMonitor.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @monitors = Monitor.order(:name)
+    @monitors = SiteMonitor.order(:name)
   end
 
   def update
     if @maintenance_window.update(maintenance_window_params)
       redirect_to @maintenance_window, notice: 'Maintenance window was successfully updated.'
     else
-      @monitors = Monitor.order(:name)
+      @monitors = SiteMonitor.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end

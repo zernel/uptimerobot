@@ -7,7 +7,7 @@ class MonitorCheckJob < ApplicationJob
   )
 
   def perform(monitor_id)
-    monitor = Monitor.find(monitor_id)
+    monitor = SiteMonitor.find(monitor_id)
     return if monitor.paused?
 
     checker = checker_for(monitor)
