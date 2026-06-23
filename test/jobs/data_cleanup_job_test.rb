@@ -8,6 +8,7 @@ class DataCleanupJobTest < ActiveSupport::TestCase
       monitor: monitor,
       status: "up",
       checked_at: 10.days.ago,
+      created_at: 10.days.ago,
       response_time: 100
     )
 

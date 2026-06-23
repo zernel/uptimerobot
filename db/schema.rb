@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_084841) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_093517) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -242,6 +242,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_084841) do
     t.string "keyword"
     t.string "keyword_type", limit: 10
     t.datetime "last_check_at"
+    t.datetime "last_heartbeat_at"
     t.datetime "last_status_change_at"
     t.bigint "monitor_group_id"
     t.string "monitor_type", limit: 50, null: false
