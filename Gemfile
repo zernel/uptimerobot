@@ -27,7 +27,7 @@ gem "whenever", require: false
 gem "faraday", "~> 2.0"
 
 # Authentication for single admin user
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 
 # Pagination
 gem "kaminari"
