@@ -1,0 +1,15 @@
+<%= @incident.ongoing? ? 'Monitor Down' : 'Monitor Up' %>: <%= @monitor.name %>
+
+URL: <%= @monitor.url || @monitor.hostname %>
+Status: <%= @incident.ongoing? ? 'Down' : 'Up' %>
+
+<% if @incident.ongoing? %>
+Started: <%= @incident.started_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
+Cause: <%= @incident.cause_detail || @incident.cause %>
+<% else %>
+Downtime: <%= distance_of_time_in_words(@incident.duration) %>
+Resolved at: <%= @incident.resolved_at.strftime('%Y-%m-%d %H:%M:%S UTC') %>
+<% end %>
+
+---
+This is an automated message from your Uptime Monitor.

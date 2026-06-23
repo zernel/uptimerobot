@@ -5,7 +5,7 @@ class ResponseTimeStat < ApplicationRecord
 
   validates :period_type, presence: true
   validates :period_start, presence: true
-  validates :period_start, uniqueness: { scope: [:monitor_id, :period_type] }
+  validates :period_start, uniqueness: { scope: [ :monitor_id, :period_type ] }
 
   scope :recent, -> { order(period_start: :desc) }
 end

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+  <h1><%= @incident.ongoing? ? 'Monitor Down' : 'Monitor Up' %></h1>
+
+  <div style="margin: 20px 0; padding: 15px; background-color: <%= @incident.ongoing? ? '#fee2e2' : '#dcfce7' %>; border-radius: 5px;">
+    <h2><%= @monitor.name %></h2>
+    <p><strong>URL:</strong> <%= @monitor.url || @monitor.hostname %></p>
+    <p><strong>Status:</strong> <%= @incident.ongoing? ? 'Down' : 'Up' %></p>
+
+    <% if @incident.ongoing? %>
+      <p><strong>Started:</strong> <%= @incident.started_at.strftime('%Y-%m-%d %H:%M:%S UTC') %></p>
+      <p><strong>Cause:</strong> <%= @incident.cause_detail || @incident.cause %></p>
+    <% else %>
+      <p><strong>Downtime:</strong> <%= distance_of_time_in_words(@incident.duration) %></p>
+      <p><strong>Resolved at:</strong> <%= @incident.resolved_at.strftime('%Y-%m-%d %H:%M:%S UTC') %></p>
+    <% end %>
+  </div>
+
+  <p style="color: #6b7280; font-size: 12px;">
+    This is an automated message from your Uptime Monitor.
+  </p>
+</body>
+</html>

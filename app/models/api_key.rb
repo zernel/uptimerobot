@@ -13,7 +13,7 @@ class ApiKey < ApplicationRecord
     digest = OpenSSL::Digest.new("sha256")
     key_digest = OpenSSL::HMAC.hexdigest(digest, "uptimerobot", raw_key)
     key_prefix = raw_key.first(8)
-    [raw_key, key_digest, key_prefix]
+    [ raw_key, key_digest, key_prefix ]
   end
 
   def expired?
