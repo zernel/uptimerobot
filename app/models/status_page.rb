@@ -1,6 +1,6 @@
 class StatusPage < ApplicationRecord
   has_many :status_page_monitors, dependent: :destroy
-  has_many :monitors, through: :status_page_monitors
+  has_many :monitors, through: :status_page_monitors, source: :monitor
   has_many :announcements, dependent: :destroy
 
   validates :name, presence: true

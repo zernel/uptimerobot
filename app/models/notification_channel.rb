@@ -1,6 +1,6 @@
 class NotificationChannel < ApplicationRecord
   has_many :monitor_notification_channels, dependent: :destroy
-  has_many :monitors, through: :monitor_notification_channels
+  has_many :monitors, through: :monitor_notification_channels, source: :monitor
   has_many :notification_logs, dependent: :destroy
 
   enum :channel_type, {
