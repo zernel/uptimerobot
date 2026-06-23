@@ -1,12 +1,12 @@
 ongoing_incident:
-  monitor: http_monitor (SiteMonitor)
+  monitor_id: <%= ActiveRecord::FixtureSet.identify(:http_monitor) %>
   status: ongoing
   started_at: <%= 1.hour.ago %>
   cause: connection_failed
   cause_detail: "Connection refused by server"
 
 resolved_incident:
-  monitor: http_monitor (SiteMonitor)
+  monitor_id: <%= ActiveRecord::FixtureSet.identify(:http_monitor) %>
   status: resolved
   started_at: <%= 3.hours.ago %>
   resolved_at: <%= 2.hours.ago %>
