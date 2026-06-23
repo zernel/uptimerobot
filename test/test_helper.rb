@@ -3,6 +3,8 @@ require_relative "../config/environment"
 require "rails/test_help"
 require "webmock/minitest"
 
+WebMock.disable_net_connect!
+
 ActiveRecord.verify_foreign_keys_for_fixtures = false
 
 module ActiveSupport
@@ -13,7 +15,6 @@ module ActiveSupport
 
     include Devise::Test::IntegrationHelpers
     include ActiveSupport::Testing::TimeHelpers
+    include ActiveJob::TestHelper
   end
 end
-
-Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new

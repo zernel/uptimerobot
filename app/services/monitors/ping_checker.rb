@@ -10,6 +10,7 @@ module Monitors
         monitor: monitor,
         status: ping.status == 'alive' ? :up : :down,
         response_time: (ping.duration * 1000).to_i,
+        checked_at: Time.current,
         metadata: {
           ping_duration: ping.duration,
           host: monitor.hostname
@@ -19,6 +20,7 @@ module Monitors
       CheckResult.new(
         monitor: monitor,
         status: :down,
+        checked_at: Time.current,
         error_message: e.message
       )
     end

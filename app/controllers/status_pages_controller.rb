@@ -49,6 +49,12 @@ class StatusPagesController < ApplicationController
   end
 
   def preview
+    @monitors = @status_page.monitors
+                            .includes(:incidents)
+                            .order(:name)
+    @announcements = @status_page.announcements
+                                 .where.not(status: 'resolved')
+                                 .order(started_at: :desc)
     render :show
   end
 

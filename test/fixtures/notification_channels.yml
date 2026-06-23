@@ -1,6 +1,6 @@
 slack_channel:
   name: "Slack Alerts"
-  channel_type: webhook
+  channel_type: slack
   config: { webhook_url: "https://hooks.slack.com/test" }
   enabled: true
 

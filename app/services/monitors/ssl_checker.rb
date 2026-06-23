@@ -7,6 +7,7 @@ module Monitors
         return CheckResult.new(
           monitor: monitor,
           status: :down,
+          checked_at: Time.current,
           error_message: 'Unable to fetch SSL certificate'
         )
       end
@@ -17,6 +18,7 @@ module Monitors
       CheckResult.new(
         monitor: monitor,
         status: status,
+        checked_at: Time.current,
         metadata: {
           subject: certificate.subject.to_s,
           issuer: certificate.issuer.to_s,
@@ -30,6 +32,7 @@ module Monitors
       CheckResult.new(
         monitor: monitor,
         status: :down,
+        checked_at: Time.current,
         error_message: e.message
       )
     end

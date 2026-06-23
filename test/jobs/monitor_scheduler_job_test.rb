@@ -2,6 +2,7 @@ require "test_helper"
 
 class MonitorSchedulerJobTest < ActiveSupport::TestCase
   test "enqueues MonitorCheckJob for monitors due for check" do
+    SiteMonitor.active.update_all(last_check_at: 10.seconds.ago)
     monitor = site_monitors(:http_monitor)
     monitor.update!(last_check_at: 2.minutes.ago, interval: 60)
 
@@ -11,19 +12,17 @@ class MonitorSchedulerJobTest < ActiveSupport::TestCase
   end
 
   test "skips monitors checked recently" do
-    monitor = site_monitors(:http_monitor)
-    monitor.update!(last_check_at: 10.seconds.ago, interval: 60)
+    SiteMonitor.active.update_all(last_check_at: 10.seconds.ago, interval: 300)
 
-    assert_no_enqueued_jobs(only: MonitorCheckJob) do
+    assert_no_enqueued_jobs do
       MonitorSchedulerJob.perform_now
     end
   end
 
   test "skips paused monitors" do
-    monitor = site_monitors(:paused_monitor)
-    monitor.update!(last_check_at: 2.minutes.ago)
+    SiteMonitor.where(paused: false).update_all(last_check_at: 10.seconds.ago, interval: 300)
 
-    assert_no_enqueued_jobs(only: MonitorCheckJob) do
+    assert_no_enqueued_jobs do
       MonitorSchedulerJob.perform_now
     end
   end

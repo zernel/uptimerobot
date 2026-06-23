@@ -15,6 +15,7 @@ module Monitors
         monitor: monitor,
         status: determine_status(response),
         response_time: response_time,
+        checked_at: Time.current,
         metadata: {
           http_status: response.status,
           response_size: response.body&.length,
@@ -25,6 +26,7 @@ module Monitors
       CheckResult.new(
         monitor: monitor,
         status: :down,
+        checked_at: Time.current,
         error_message: e.message,
         metadata: { error_class: e.class.name }
       )

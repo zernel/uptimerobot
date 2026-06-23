@@ -1,10 +1,12 @@
 class MonitorCheckJob < ApplicationJob
   queue_as :monitors
 
-  good_job_control_concurrency_with(
-    total_limit: 10,
-    key: -> { "monitor-check-#{arguments.first}" }
-  )
+  if respond_to?(:good_job_control_concurrency_with)
+    good_job_control_concurrency_with(
+      total_limit: 10,
+      key: -> { "monitor-check-#{arguments.first}" }
+    )
+  end
 
   def perform(monitor_id)
     monitor = SiteMonitor.find(monitor_id)
