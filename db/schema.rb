@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_081959) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_084841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -213,7 +213,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_081959) do
     t.index ["notification_channel_id"], name: "index_monitor_notification_channels_on_notification_channel_id"
   end
 
-  create_table "monitor_tags", id: false, force: :cascade do |t|
+  create_table "monitor_tags", force: :cascade do |t|
     t.bigint "monitor_id", null: false
     t.bigint "tag_id", null: false
     t.index ["monitor_id", "tag_id"], name: "index_monitor_tags_on_monitor_id_and_tag_id", unique: true
