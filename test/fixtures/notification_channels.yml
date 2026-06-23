@@ -1,0 +1,11 @@
+slack_channel:
+  name: "Slack Alerts"
+  channel_type: webhook
+  config: { webhook_url: "https://hooks.slack.com/test" }
+  enabled: true
+
+email_channel:
+  name: "Email Alerts"
+  channel_type: email
+  config: { address: "alerts@example.com" }
+  enabled: true

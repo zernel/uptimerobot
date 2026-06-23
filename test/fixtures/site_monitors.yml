@@ -1,0 +1,33 @@
+http_monitor:
+  name: "Example.com HTTP"
+  monitor_type: http
+  url: https://example.com
+  interval: 60
+  timeout: 30
+  status: up
+  paused: false
+  consecutive_failures: 0
+
+ping_monitor:
+  name: "Google DNS Ping"
+  monitor_type: ping
+  hostname: 8.8.8.8
+  interval: 300
+  timeout: 10
+  status: pending
+  paused: false
+
+paused_monitor:
+  name: "Paused Monitor"
+  monitor_type: http
+  url: https://paused.example.com
+  interval: 60
+  status: paused
+  paused: true
+
+heartbeat_monitor:
+  name: "Cron Job Heartbeat"
+  monitor_type: heartbeat
+  interval: 3600
+  heartbeat_token: "test-heartbeat-token-123"
+  status: pending

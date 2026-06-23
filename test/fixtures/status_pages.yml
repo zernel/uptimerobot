@@ -1,0 +1,7 @@
+service_status:
+  name: "Service Status"
+  slug: "status"
+  published: true
+  theme_color: "#1F2937"
+  layout: wide
+  show_uptime_percentage: true

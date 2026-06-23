@@ -1,0 +1,11 @@
+recent_success:
+  monitor: http_monitor (SiteMonitor)
+  status: up
+  response_time: 150
+  checked_at: <%= 5.minutes.ago %>
+
+recent_failure:
+  monitor: http_monitor (SiteMonitor)
+  status: down
+  error_message: "Connection refused"
+  checked_at: <%= 10.minutes.ago %>

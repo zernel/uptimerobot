@@ -1,0 +1,7 @@
+production:
+  name: production
+  color: "#ef4444"
+
+staging:
+  name: staging
+  color: "#f59e0b"

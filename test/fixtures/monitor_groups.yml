@@ -1,0 +1,9 @@
+web_group:
+  name: "Web Services"
+  description: "Web applications"
+  sort_order: 1
+
+api_group:
+  name: "API Services"
+  description: "Backend APIs"
+  sort_order: 2

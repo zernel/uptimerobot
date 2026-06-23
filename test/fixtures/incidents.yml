@@ -1,0 +1,14 @@
+ongoing_incident:
+  monitor: http_monitor (SiteMonitor)
+  status: ongoing
+  started_at: <%= 1.hour.ago %>
+  cause: connection_failed
+  cause_detail: "Connection refused by server"
+
+resolved_incident:
+  monitor: http_monitor (SiteMonitor)
+  status: resolved
+  started_at: <%= 3.hours.ago %>
+  resolved_at: <%= 2.hours.ago %>
+  duration: 3600
+  cause: timeout
