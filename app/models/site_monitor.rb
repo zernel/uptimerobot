@@ -1,16 +1,17 @@
 class SiteMonitor < ApplicationRecord
   self.table_name = "monitors"
+
   belongs_to :monitor_group, optional: true
 
-  has_many :check_results, dependent: :destroy
-  has_many :incidents, dependent: :destroy
-  has_many :monitor_notification_channels, dependent: :destroy
+  has_many :check_results, foreign_key: :monitor_id, dependent: :destroy
+  has_many :incidents, foreign_key: :monitor_id, dependent: :destroy
+  has_many :monitor_notification_channels, foreign_key: :monitor_id, dependent: :destroy
   has_many :notification_channels, through: :monitor_notification_channels
-  has_many :monitor_tags, dependent: :destroy
+  has_many :monitor_tags, foreign_key: :monitor_id, dependent: :destroy
   has_many :tags, through: :monitor_tags
-  has_many :status_page_monitors, dependent: :destroy
+  has_many :status_page_monitors, foreign_key: :monitor_id, dependent: :destroy
   has_many :status_pages, through: :status_page_monitors
-  has_many :response_time_stats, dependent: :destroy
+  has_many :response_time_stats, foreign_key: :monitor_id, dependent: :destroy
 
   enum :status, { up: "up", down: "down", pending: "pending", paused: "paused" }, default: "pending"
   enum :monitor_type, {

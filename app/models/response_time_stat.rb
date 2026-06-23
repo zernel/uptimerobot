@@ -1,5 +1,5 @@
 class ResponseTimeStat < ApplicationRecord
-  belongs_to :monitor
+  belongs_to :monitor, class_name: "SiteMonitor"
 
   enum :period_type, { hourly: "hourly", daily: "daily" }
 

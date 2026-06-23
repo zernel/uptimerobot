@@ -1,5 +1,5 @@
 class Incident < ApplicationRecord
-  belongs_to :monitor
+  belongs_to :monitor, class_name: "SiteMonitor"
 
   has_many :incident_comments, dependent: :destroy
   has_many :notification_logs, dependent: :nullify

@@ -1,7 +1,7 @@
 class NotificationLog < ApplicationRecord
   belongs_to :incident, optional: true
   belongs_to :notification_channel
-  belongs_to :monitor
+  belongs_to :monitor, class_name: "SiteMonitor"
 
   enum :status, { sent: "sent", failed: "failed" }
 

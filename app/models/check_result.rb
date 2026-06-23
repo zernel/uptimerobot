@@ -1,5 +1,5 @@
 class CheckResult < ApplicationRecord
-  belongs_to :monitor
+  belongs_to :monitor, class_name: "SiteMonitor"
 
   enum :status, { up: "up", down: "down" }
 
