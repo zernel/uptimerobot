@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 
 # Background jobs - PostgreSQL-based, no Redis needed
-gem "good_job", "~> 3.0"
+gem "good_job", "~> 4.19"
 
 # Cron scheduling
 gem "whenever", require: false
